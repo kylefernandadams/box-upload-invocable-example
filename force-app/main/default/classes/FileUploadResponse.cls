@@ -55,7 +55,7 @@ public class FileUploadResponse {
 	}
 
 	public class BoxUser {
-		public Integer id;
+		public String id;
 		public String type;
 		public String name;
 		public String login;
