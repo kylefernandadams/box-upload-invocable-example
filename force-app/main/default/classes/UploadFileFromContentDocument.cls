@@ -51,7 +51,7 @@ public with sharing class UploadFileFromContentDocument {
         @InvocableVariable(label='Box - Message')
         public String boxMessage;
 
-        @InvocableVariable(label='Box - Content')
+        @InvocableVariable(label='Box - Context')
         public String boxContext;
     }
 
@@ -60,6 +60,15 @@ public with sharing class UploadFileFromContentDocument {
         List<BoxResult> boxResultList = new List<BoxResult>();
         for(BoxRequest boxRequest: boxRequestList) {
             BoxResult boxResult = new BoxResult();
+
+            String folderId = boxRequest.boxFolderId;
+            if(String.isEmpty(folderId)) {
+                box__FRUP__c frup = [
+                    SELECT box__Folder_ID__c, box__Record_ID__c, box__Box_user__c 
+                        FROM box__FRUP__c 
+                            WHERE box__Record_ID__c = :recordId LIMIT 1];
+                folderId = frup.box__Folder_ID__c;
+            }
             
             // Get the latest version from the CDL by ContentDocumentId
             ContentDocumentLink cdl = [
